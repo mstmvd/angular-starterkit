@@ -1,0 +1,7 @@
+<div>
+    My awesome home page
+</div>
+<div *ngIf="authService.isLoggedIn() as status; then logoutBlock else loginBlock" routerLink="auth/login"></div>
+<ng-template #loginBlock><a routerLink="auth/login">login</a></ng-template>
+<ng-template #logoutBlock><a routerLink="auth/logout">logout</a></ng-template>
+<div><a routerLink="dashboard">dashboard</a></div>

@@ -1,0 +1,32 @@
+<nb-card>
+    <nb-card-header [translate]="'dashboard.sample.title'"></nb-card-header>
+    <nb-card-body>
+        <button type="button" class="btn btn-primary" (click)="this.store()" [translate]="'common.button.new'"></button>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
+            <thead>
+            <tr>
+                <td [translate]="'common.grid.title'"></td>
+                <td [translate]="'common.grid.description'"></td>
+                <td [translate]="'common.grid.actions'"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let sample of this.entities">
+                <td>{{sample.title}}</td>
+                <td>{{sample.description}}</td>
+                <td>
+                    <a routerLink="{{sample.id}}/sub" class="grid-btn btn btn-info"
+                       [translate]="'dashboard.sample.sub.title'"></a>
+                    <button class="grid-btn btn btn-warning" (click)="this.update(sample)"
+                            [translate]="'common.button.edit'"></button>
+                    <button class="grid-btn btn btn-danger" (click)="this.destroy(sample)"
+                            [translate]="'common.button.delete'"></button>
+                </td>
+            </tr>
+            <tr *ngIf="this.entities?.length == 0">
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+            </tbody>
+        </table>
+    </nb-card-body>
+</nb-card>

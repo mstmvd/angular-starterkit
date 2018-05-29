@@ -1,0 +1,12 @@
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
+<nb-layout>
+    <nb-layout-header>
+        <nb-user name="User"></nb-user>
+    </nb-layout-header>
+    <nb-sidebar start>
+        <nb-menu [items]="menu_items"></nb-menu>
+    </nb-sidebar>
+    <nb-layout-column>
+        <router-outlet (passData)="getData($event)"></router-outlet>
+    </nb-layout-column>
+</nb-layout>
