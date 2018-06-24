@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NbMenuItem} from '@nebular/theme';
 import {ToasterConfig} from 'angular2-toaster';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
-import {Const} from '../util/const';
+import {Const} from '../../util/const';
 
 @Component({
     selector: 'app-dashboard',
@@ -25,12 +25,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
-        this.transSub.unsubscribe();
-    }
-
     private fillMenuItems() {
         this.menu_items = [];
-        this.translate.get('sample_title').subscribe(value => this.menu_items.push({title: value, link: 'sample'}));
+        this.translate.get('dashboard.menu.sample').subscribe(value => this.menu_items.push({title: value, link: 'sample'}));
+    }
+
+    ngOnDestroy(): void {
+        this.transSub.unsubscribe();
     }
 }

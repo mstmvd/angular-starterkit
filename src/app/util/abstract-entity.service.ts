@@ -41,10 +41,11 @@ export abstract class AbstractEntityService<Entity extends AbstractEntity> {
     }
 
     store(entity: Entity) {
+        const me = this;
         const formData: FormData = new FormData();
         Object.keys(entity).forEach(function (value, index, array) {
             if (entity[value] !== null && entity[value] !== undefined) {
-                formData.append(value, entity[value]);
+                me.append(entity, value, formData);
             }
         });
         return this.http.post<ServerResponse>(this.getRoute(), formData);
@@ -55,13 +56,22 @@ export abstract class AbstractEntityService<Entity extends AbstractEntity> {
     }
 
     update(entity: Entity) {
+        const me = this;
         entity['_method'] = 'PUT';
         const formData: FormData = new FormData();
         Object.keys(entity).forEach(function (value, index, array) {
             if (entity[value] !== null && entity[value] !== undefined) {
-                formData.append(value, entity[value]);
+                me.append(entity, value, formData);
             }
         });
         return this.http.post<ServerResponse>(this.getRoute() + '/' + entity.id, formData);
+    }
+
+    private append(entity: Entity, value, formData: FormData) {
+        if (entity[value] instanceof File || typeof entity[value] !== 'object') {
+            formData.append(value, entity[value]);
+        } else {
+            formData.append(value, JSON.stringify(entity[value]));
+        }
     }
 }

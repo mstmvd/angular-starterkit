@@ -16,8 +16,9 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgHttpLoaderModule} from 'ng-http-loader';
-import {SampleModalComponent} from './dashboard/sample/sample.modal.component';
-import {SubSampleModalComponent} from './dashboard/sample/sub-sample/sub-sample.modal.component';
+import {UserService} from './common/user.service';
+import {DynamicFormControlComponent} from './util/dynamic-form/dynamic-form-control.component';
+import {DynamicModalFormComponent} from './util/dynamic-form/dynamic-modal-form.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -27,8 +28,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
     declarations: [
         AppComponent,
-        SampleModalComponent,
-        SubSampleModalComponent,
+        DynamicFormControlComponent,
+        DynamicModalFormComponent
     ],
     imports: [
         BrowserModule,
@@ -51,15 +52,17 @@ export function HttpLoaderFactory(http: HttpClient) {
         }),
         NgHttpLoaderModule
     ],
-    providers: [{
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true,
-    },
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
         AuthGuard,
-        ToasterService],
+        ToasterService,
+        UserService],
     bootstrap: [AppComponent],
-    entryComponents: [SampleModalComponent, SubSampleModalComponent]
+    entryComponents: [DynamicModalFormComponent]
 
 })
 export class AppModule {

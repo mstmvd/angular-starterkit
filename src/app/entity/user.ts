@@ -18,4 +18,8 @@ export class User extends AbstractEntity {
 
     init() {
     }
+
+    toString() {
+        return this.name + ' ' + this.family;
+    }
 }

@@ -1,6 +1,6 @@
 import {Pagination} from './pagination';
 import {DataTablesResponse} from './data-tables-response';
-import {AbstractEntityService} from './abstract-entity-service';
+import {AbstractEntityService} from './abstract-entity.service';
 import {AbstractEntity} from '../entity/abstract-entity';
 import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -9,18 +9,14 @@ import {ToasterService} from 'angular2-toaster';
 import {ActivatedRoute} from '@angular/router';
 import {Helper} from './helper';
 import {Subject} from 'rxjs';
-import {AbstractModalComponent} from './abstract-modal-component';
+import {DynamicModalFormComponent} from './dynamic-form/dynamic-modal-form.component';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
-import {DataTableDirective} from 'angular-datatables';
 import {Const} from './const';
-import {Sample} from '../entity/sample';
-import {SampleModalComponent} from '../dashboard/sample/sample.modal.component';
-import {SubSample} from '../entity/sub-sample';
-import {SubSampleModalComponent} from '../dashboard/sample/sub-sample/sub-sample.modal.component';
+import {GridComponent} from './grid.component';
 
 export abstract class AbstractEntityComponent<Entity extends AbstractEntity> implements OnInit, OnDestroy {
-    @ViewChild(AbstractModalComponent)
-
+    @ViewChild(DynamicModalFormComponent)
+    @ViewChild(GridComponent)
     public dtOptions: DataTables.Settings = {};
     entities: Entity[] = [];
     dataTableResponse: DataTablesResponse<Entity> = null;
@@ -28,13 +24,12 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
     http: HttpClient;
     entityType: any;
     activeSelector: string;
-    modalComponent;
+    modalFormComponent = DynamicModalFormComponent;
     paginate = false;
     sub: any;
     dtTrigger: Subject<any> = new Subject();
     transSub: any;
-    @ViewChild(DataTableDirective)
-    dtElement: DataTableDirective;
+    title: string;
 
     protected constructor(entityType: new () => Entity,
                           service: AbstractEntityService<Entity>,
@@ -52,26 +47,8 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
         this.paginate = this.service.paginate;
     }
 
-    dtRender(): void {
-        if (this.dtElement.dtInstance) {
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.destroy();
-                this.dtTrigger.next();
-            });
-        } else {
-            this.dtTrigger.next();
-        }
-    }
 
     ngOnInit() {
-        switch (this.entityType) {
-            case Sample:
-                this.modalComponent = SampleModalComponent;
-                break;
-            case SubSample:
-                this.modalComponent = SubSampleModalComponent;
-                break;
-        }
         this.index();
         const me = this;
         this.transSub = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -120,7 +97,6 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
                     pagingType: 'full_numbers',
                     pageLength: Pagination.DEFAULT_PER_PAGE
                 };
-                this.dtRender();
             });
         }
     }
@@ -145,11 +121,22 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
 
     update(entity: Entity) {
         const me = this;
-        const activeModal = this.modalService.open(this.modalComponent, {size: 'lg'});
-        activeModal.componentInstance.modalHeader = 'Edit Modal';
+        const activeModal = this.modalService.open(this.modalFormComponent, {size: 'lg'});
+        this.translate.get('button.update').subscribe((res) => activeModal.componentInstance.modalHeader = res);
         activeModal.componentInstance.entity = entity;
         activeModal.result.then((result) => {
-                this.service.update(result).subscribe((response) => {
+                if (!result) {
+                    return;
+                }
+                const entityRes = new this.entityType();
+                Object.keys(entityRes).forEach(value => entityRes[value] = entity[value]);
+                result.forEach(control => {
+                    entityRes[control.key] = control.value;
+                });
+                this.service.update(entityRes).subscribe((response) => {
+                        Object.keys(entityRes).forEach(value => {
+                            entity[value] = entityRes[value];
+                        });
                         Helper.showToast(me.toasterService, 'success', '', response.message);
                     },
                     (error) => {
@@ -171,13 +158,18 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
 
     store() {
         const me = this;
-        const activeModal = this.modalService.open(this.modalComponent, {size: 'lg', container: this.activeSelector});
-        activeModal.componentInstance.modalHeader = 'Store Modal';
+        const activeModal = this.modalService.open(this.modalFormComponent, {size: 'lg', container: this.activeSelector});
+        this.translate.get('button.new').subscribe((res) => activeModal.componentInstance.modalHeader = res);
+        activeModal.componentInstance.entity = new this.entityType();
         activeModal.result.then((result) => {
             if (!result) {
                 return;
             }
-            this.service.store(result).subscribe((response) => {
+            const entity = new this.entityType();
+            result.forEach(control => {
+                entity[control.key] = control.value;
+            });
+            this.service.store(entity).subscribe((response) => {
                     this.entities.push(result);
                     this.index();
                     Helper.showToast(me.toasterService, 'success', '', response.message);
@@ -197,6 +189,10 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
             console.log(reason);
         });
 
+    }
+
+    doAction(event) {
+        this[event.name](event.value);
     }
 
 }

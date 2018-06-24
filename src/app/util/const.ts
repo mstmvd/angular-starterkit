@@ -18,4 +18,7 @@ export class Const {
         animation: 'fade',
         bodyOutputType: BodyOutputType.TrustedHtml
     });
+
+    static dynamicFormControlfMetadataKey = 'DynamicFormControl';
+    static gridMetadataKey = 'Grid';
 }

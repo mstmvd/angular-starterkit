@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {AbstractEntityService} from '../../../util/abstract-entity-service';
-import {SubSample} from '../../../entity/sub-sample';
+import {AbstractEntityService} from '../../../../util/abstract-entity.service';
+import {SubSample} from '../../../../entity/sub-sample';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SubSampleService extends AbstractEntityService<SubSample> {
+export class SampleSubService extends AbstractEntityService<SubSample> {
 
     route = `/api/sample/{sample_id}/sub`;
 

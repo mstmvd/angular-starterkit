@@ -33,4 +33,14 @@ export class Helper {
         return entities;
     }
 
+    static equals(a, b) {
+        if (a && b) {
+            if (typeof a === typeof b && typeof a === 'object') {
+                return a.id === b.id;
+            } else {
+                return a === b;
+            }
+        }
+        return false;
+    }
 }

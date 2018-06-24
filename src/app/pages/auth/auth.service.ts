@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from '../entity/user';
+import {User} from '../../entity/user';
 import {JsonConvert, ValueCheckingMode} from 'json2typescript';
 
 import * as moment from 'moment';
-import {Helper} from '../util/helper';
+import {Helper} from '../../util/helper';
 
 @Injectable({
     providedIn: 'root'

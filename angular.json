@@ -29,7 +29,8 @@
               // or cosmic.css
               "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
-              "node_modules/angular2-toaster/toaster.css"
+              "node_modules/angular2-toaster/toaster.css",
+              "node_modules/font-awesome/scss/font-awesome.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
@@ -51,7 +52,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,

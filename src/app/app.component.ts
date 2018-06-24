@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AuthService} from './auth/auth.service';
+import {AuthService} from './pages/auth/auth.service';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {NbLayoutDirection, NbLayoutDirectionService} from '@nebular/theme';
 import {Spinkit} from 'ng-http-loader';

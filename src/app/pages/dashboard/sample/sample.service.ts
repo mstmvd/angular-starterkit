@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {AbstractEntityService} from '../../util/abstract-entity-service';
-import {Sample} from '../../entity/sample';
+import {AbstractEntityService} from '../../../util/abstract-entity.service';
+import {Sample} from '../../../entity/sample';
 
 @Injectable({
     providedIn: 'root'
