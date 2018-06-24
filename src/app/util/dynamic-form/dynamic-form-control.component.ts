@@ -21,7 +21,7 @@ import {Helper} from '../helper';
                     <option *ngFor="let opt of control.options" [ngValue]="opt.value">{{opt.label}}</option>
                 </select>
             </div>
-            <div class="errorMessage" *ngIf="!isValid">{{control.label}} is required</div>
+            <div class="errorMessage" *ngIf="!isValid">{{control.label}} is invalid</div>
         </div>`
 })
 export class DynamicFormControlComponent implements OnInit {

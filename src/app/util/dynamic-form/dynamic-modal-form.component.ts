@@ -53,7 +53,9 @@ export class DynamicModalFormComponent<Entity extends AbstractEntity> implements
     }
 
     submit() {
-        this.activeModal.close(this.controls);
+        if (this.form.valid) {
+            this.activeModal.close(this.controls);
+        }
     }
 
     createFrom() {

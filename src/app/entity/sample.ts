@@ -7,13 +7,16 @@ import {TextareaFormControl} from '../util/dynamic-form/controls/textarea-form-c
 import {SelectFormControl} from '../util/dynamic-form/controls/select-form-control';
 import {User} from './user';
 import {UserService} from '../common/user.service';
+import {Validators} from '@angular/forms';
 
 @JsonObject
 export class Sample extends AbstractEntity {
 
     @JsonProperty('title', String)
-    @DynamicFormControl(new InputFormControl({type: 'text', hide: false}))
-    @Grid()
+    @DynamicFormControl(new InputFormControl({
+        type: 'text', hide: false,
+        validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
+    })) @Grid()
     title: string = undefined;
 
     @JsonProperty('description', String)

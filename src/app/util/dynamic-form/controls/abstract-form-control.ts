@@ -1,11 +1,10 @@
-import {FormGroup} from '@angular/forms';
+import {FormGroup, ValidatorFn} from '@angular/forms';
 
 export interface DynamicFormControlDataService {
     service: any;
     entity: any;
     params?: {};
 }
-
 export interface DynamicFormControlHidden {
     when: { field: string, value: string };
 }
@@ -20,6 +19,7 @@ export interface AbstractFormControlOptions<T> {
     change?: Function;
     dataService?: DynamicFormControlDataService;
     hide?: DynamicFormControlHidden | Boolean;
+    validators?: ValidatorFn[];
 }
 
 export class AbstractFormControl<T> {
@@ -33,6 +33,7 @@ export class AbstractFormControl<T> {
     change: Function;
     dataService: DynamicFormControlDataService = undefined;
     hide: DynamicFormControlHidden | Boolean = undefined;
+    validators: ValidatorFn[] = [];
 
     constructor(options: AbstractFormControlOptions<T> = {}) {
         const me = this;
@@ -47,6 +48,7 @@ export class AbstractFormControl<T> {
         };
         this.dataService = options.dataService || undefined;
         this.hide = options.hide || undefined;
+        this.validators = options.validators || [];
     }
 
     fillData(service) {
