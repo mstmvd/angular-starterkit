@@ -27,7 +27,6 @@
     "angular-datatables": "^6.0.0",
     "angular2-toaster": "^6.0.0",
     "bootstrap": "^4.1.1",
-    "case": "^1.5.5",
     "core-js": "^2.5.4",
     "datatables.net": "^1.10.16",
     "datatables.net-buttons": "^1.5.1",

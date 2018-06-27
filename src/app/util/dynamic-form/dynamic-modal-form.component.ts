@@ -67,7 +67,7 @@ export class DynamicModalFormComponent<Entity extends AbstractEntity> implements
             if (control !== undefined && control.controlType !== undefined) {
                 control.value = me.entity[value];
                 control.key = value;
-                me.translate.stream('entity.' + lower(me.entity.constructor.name, '.') + '.' + value).subscribe(res => {
+                me.translate.stream('entity.' + me.entity.constructor.name + '.' + value).subscribe(res => {
                     control.label = res;
                     control.placeholder = res;
                 });

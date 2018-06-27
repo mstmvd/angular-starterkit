@@ -83,7 +83,7 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
         if (changes['entities']) {
             if (this.entities.length > 0) {
                 const me = this;
-                this.translatePrefix = 'entity.' + lower(this.entities[0].constructor.name, '.') + '.';
+                this.translatePrefix = 'entity.' + this.entities[0].constructor.name + '.';
                 Object.keys(this.entities[0]).forEach(function (value, index, array) {
                     const option = getGrid(me.entities[0], value);
                     if (option) {
