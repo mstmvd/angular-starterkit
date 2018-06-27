@@ -1,12 +1,20 @@
 <toaster-container [toasterconfig]="toasterConfig"></toaster-container>
 <nb-layout>
     <nb-layout-header>
-        <nb-user name="User"></nb-user>
+        <nb-actions size="medium">
+            <nb-action>
+                <nb-user [name]="this.userService.user.toString()" [picture]=""
+                         [nbContextMenu]="this.userMenuItems" [nbContextMenuTag]="'user-context-menu'"></nb-user>
+            </nb-action>
+            <nb-action>
+                <app-language></app-language>
+            </nb-action>
+        </nb-actions>
     </nb-layout-header>
     <nb-sidebar start>
         <nb-menu [items]="menu_items"></nb-menu>
     </nb-sidebar>
     <nb-layout-column>
-        <router-outlet (passData)="getData($event)"></router-outlet>
+        <router-outlet></router-outlet>
     </nb-layout-column>
 </nb-layout>

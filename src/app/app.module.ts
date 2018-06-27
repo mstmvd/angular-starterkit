@@ -16,7 +16,6 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgHttpLoaderModule} from 'ng-http-loader';
-import {UserService} from './common/user.service';
 import {DynamicFormControlComponent} from './util/dynamic-form/dynamic-form-control.component';
 import {DynamicModalFormComponent} from './util/dynamic-form/dynamic-modal-form.component';
 
@@ -59,8 +58,8 @@ export function HttpLoaderFactory(http: HttpClient) {
             multi: true,
         },
         AuthGuard,
-        ToasterService,
-        UserService],
+        ToasterService
+    ],
     bootstrap: [AppComponent],
     entryComponents: [DynamicModalFormComponent]
 

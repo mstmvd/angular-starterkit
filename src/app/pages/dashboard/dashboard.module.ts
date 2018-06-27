@@ -3,7 +3,17 @@ import {CommonModule} from '@angular/common';
 
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {DashboardComponent} from './dashboard.component';
-import {NbCardModule, NbLayoutModule, NbMenuModule, NbSidebarModule, NbSidebarService, NbUserModule} from '@nebular/theme';
+import {
+    NbActionsModule,
+    NbCardModule,
+    NbContextMenuModule,
+    NbLayoutModule,
+    NbMenuModule,
+    NbMenuService,
+    NbSidebarModule,
+    NbSidebarService,
+    NbUserModule
+} from '@nebular/theme';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToasterModule, ToasterService} from 'angular2-toaster';
 import {TranslateModule} from '@ngx-translate/core';
@@ -15,6 +25,7 @@ import {SampleSubService} from './sample/sub/sample-sub.service';
 import {SampleService} from './sample/sample.service';
 import {GridComponent} from '../../util/grid.component';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {LanguageComponent} from '../../common/language.component';
 
 @NgModule({
     imports: [
@@ -31,11 +42,13 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
         DataTablesModule,
         RouterModule,
         NbCardModule,
+        NbContextMenuModule,
+        NbActionsModule
     ],
     declarations: [
-        GridComponent, DashboardComponent, SampleComponent, SampleSubComponent
+        LanguageComponent, GridComponent, DashboardComponent, SampleComponent, SampleSubComponent
     ],
-    providers: [NgbActiveModal, NbSidebarService, ToasterService, SampleService, SampleSubService]
+    providers: [NbMenuService, NgbActiveModal, NbSidebarService, ToasterService, SampleService, SampleSubService]
 })
 export class DashboardModule {
 }

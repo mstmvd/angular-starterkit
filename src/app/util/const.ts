@@ -21,4 +21,5 @@ export class Const {
 
     static dynamicFormControlfMetadataKey = 'DynamicFormControl';
     static gridMetadataKey = 'Grid';
+    static authMetadataKey = 'Auth';
 }

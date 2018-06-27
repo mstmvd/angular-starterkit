@@ -7,13 +7,14 @@ import {ActivatedRoute} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {SubSample} from '../../../../entity/sub-sample';
 import {SampleSubService} from './sample-sub.service';
+import {Auth} from '../../../../auth-guard.service';
 
 @Component({
     selector: 'app-sample-sub',
     templateUrl: '../../../../util/abstract-entity.component.html',
 })
 @Output()
-
+@Auth({roles: ['admin']})
 export class SampleSubComponent extends AbstractEntityComponent<SubSample> {
     modalHeader = 'Sub Sample';
 

@@ -40,6 +40,10 @@ export abstract class AbstractEntityService<Entity extends AbstractEntity> {
         return this.http.get<ServerResponse>(route);
     }
 
+    show(id) {
+        return this.http.get<ServerResponse>(this.getRoute() + '/' + id);
+    }
+
     store(entity: Entity) {
         const me = this;
         const formData: FormData = new FormData();

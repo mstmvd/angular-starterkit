@@ -1,8 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NbMenuItem} from '@nebular/theme';
+import {NbMenuItem, NbMenuService} from '@nebular/theme';
 import {ToasterConfig} from 'angular2-toaster';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
 import {Const} from '../../util/const';
+import {UserService} from '../../common/user.service';
+import {filter, map} from 'rxjs/internal/operators';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
@@ -14,8 +17,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     menu_items: NbMenuItem[] = [];
     toasterConfig: ToasterConfig = Const.toasterConfig;
     transSub: any;
+    userMenuItems = [/*{title: 'change role' }, */{title: 'logout'}];
 
-    constructor(public translate: TranslateService) {
+    constructor(public translate: TranslateService, protected userService: UserService, private nbMenuService: NbMenuService,
+                private router: Router) {
         this.fillMenuItems();
     }
 
@@ -23,6 +28,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.transSub = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
             this.fillMenuItems();
         });
+        this.nbMenuService.onItemClick()
+            .pipe(
+                filter(({tag}) => tag === 'user-context-menu'),
+                map(({item: {title}}) => title),
+            )
+            .subscribe(title => {
+                switch (title) {
+                    case 'change role':
+                        this.router.navigateByUrl('/auth/login');
+                        break;
+                    case 'logout':
+                        this.router.navigateByUrl('/auth/logout');
+                        break;
+                }
+            });
     }
 
     private fillMenuItems() {

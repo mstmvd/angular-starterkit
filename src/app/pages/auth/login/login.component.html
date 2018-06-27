@@ -1,19 +1,32 @@
-<form [formGroup]="form">
-    <fieldset>
-        <legend>Login</legend>
-        <div class="form-field">
-            <label>Email Or Mobile:</label>
-            <input name="email_or_mobile" formControlName="email_or_mobile">
-        </div>
-        <div class="form-field">
-            <label>Password:</label>
-            <input name="password" formControlName="password"
-                   type="password">
-        </div>
-    </fieldset>
-    <div class="form-buttons">
-        <button class="button button-primary"
-                (click)="login()">Login
-        </button>
-    </div>
-</form>
+<nb-layout>
+    <nb-layout-column>
+        <nb-card>
+            <nb-card-body>
+                <form [formGroup]="form" [hidden]="this.authService.isLoggedIn()">
+                    <fieldset>
+                        <legend>Login</legend>
+                        <div class="form-field">
+                            <label>Email Or Mobile:</label>
+                            <input name="email_or_mobile" formControlName="email_or_mobile">
+                        </div>
+                        <div class="form-field">
+                            <label>Password:</label>
+                            <input name="password" formControlName="password"
+                                   type="password">
+                        </div>
+                    </fieldset>
+                    <div class="form-buttons">
+                        <button class="button button-primary"
+                                (click)="login()">Login
+                        </button>
+                    </div>
+                </form>
+                <app-select-role
+                        *ngIf="this.userService.user"
+                        (roleChanged)="redirect()"
+                        [hidden]="!this.authService.isLoggedIn()">
+                </app-select-role>
+            </nb-card-body>
+        </nb-card>
+    </nb-layout-column>
+</nb-layout>

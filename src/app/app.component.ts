@@ -30,13 +30,4 @@ export class AppComponent {
             }
         });
     }
-
-    isLoggedIn() {
-        return this.authService.isLoggedIn();
-    }
-
-    changeLang(lang) {
-        this.translate.use(lang);
-    }
-
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
+import {UserService} from '../../../common/user.service';
 
 @Component({
     selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
 
     constructor(private fb: FormBuilder,
-                private authService: AuthService,
+                protected authService: AuthService,
+                protected userService: UserService,
                 private router: Router) {
 
         this.form = this.fb.group({
@@ -33,19 +35,24 @@ export class LoginComponent implements OnInit {
                 this.authService.loginByEmail(val.email_or_mobile, val.password)
                     .add(
                         () => {
-                            const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
-                            this.router.navigateByUrl(redirect);
+                            // const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
+                            // this.router.navigateByUrl(redirect);
                         }
                     );
             } else {
                 this.authService.loginByMobile(val.email_or_mobile, val.password)
                     .add(
                         () => {
-                            const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
-                            this.router.navigateByUrl(redirect);
+                            // const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
+                            // this.router.navigateByUrl(redirect);
                         }
                     );
             }
         }
+    }
+
+    redirect() {
+        const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/dashboard';
+        this.router.navigateByUrl(redirect);
     }
 }

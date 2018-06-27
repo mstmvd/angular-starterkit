@@ -22,7 +22,7 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
     dataTableResponse: DataTablesResponse<Entity> = null;
     service: AbstractEntityService<Entity>;
     http: HttpClient;
-    entityType: any;
+    public entityType: any;
     activeSelector: string;
     modalFormComponent = DynamicModalFormComponent;
     paginate = false;

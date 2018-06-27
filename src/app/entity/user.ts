@@ -1,5 +1,6 @@
 import {JsonObject, JsonProperty} from 'json2typescript';
 import {AbstractEntity} from './abstract-entity';
+import {Role} from './role';
 
 @JsonObject
 export class User extends AbstractEntity {
@@ -15,6 +16,11 @@ export class User extends AbstractEntity {
 
     @JsonProperty('mobile', String)
     mobile: string = undefined;
+
+    @JsonProperty('roles', [Role], true)
+    roles: Role[] = [];
+
+    activeRole: string = undefined;
 
     init() {
     }
