@@ -3,6 +3,7 @@ import {AbstractEntity} from '../entity/abstract-entity';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {Const} from './const';
+import {lower} from 'case';
 
 @Component({
     selector: 'app-grid',
@@ -27,11 +28,11 @@ import {Const} from './const';
                         <ng-template #defaultActions>
                             <span [ngSwitch]="action.type">
                                 <i *ngSwitchCase="'update'"
-                                   style="cursor: pointer"
+                                   style="cursor: pointer; color: darkorange"
                                    [class]="'grid-btn fa fa-2x fa-edit'"
                                    (click)="doAction('update', entity)" [title]="'button.update' | translate"></i>
                                 <i *ngSwitchCase="'destroy'"
-                                   style="cursor: pointer"
+                                   style="cursor: pointer; color: darkred"
                                    [class]="'grid-btn fa fa-2x fa-trash'"
                                    (click)="doAction('destroy', entity)" [title]="'button.destroy' | translate"></i>
                             </span>
@@ -82,7 +83,7 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
         if (changes['entities']) {
             if (this.entities.length > 0) {
                 const me = this;
-                this.translatePrefix = 'entity.' + this.entities[0].constructor.name.toLowerCase() + '.';
+                this.translatePrefix = 'entity.' + lower(this.entities[0].constructor.name, '.') + '.';
                 Object.keys(this.entities[0]).forEach(function (value, index, array) {
                     const option = getGrid(me.entities[0], value);
                     if (option) {

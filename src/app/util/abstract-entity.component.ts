@@ -170,7 +170,7 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
                 entity[control.key] = control.value;
             });
             this.service.store(entity).subscribe((response) => {
-                    this.entities.push(result);
+                    this.entities.push(entity);
                     this.index();
                     Helper.showToast(me.toasterService, 'success', '', response.message);
                 },
