@@ -2,7 +2,7 @@ import {Pagination} from './pagination';
 import {DataTablesResponse} from './data-tables-response';
 import {AbstractEntityService} from './abstract-entity.service';
 import {AbstractEntity} from '../entity/abstract-entity';
-import {OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ToasterService} from 'angular2-toaster';
@@ -11,12 +11,8 @@ import {Helper} from './helper';
 import {Subject} from 'rxjs';
 import {DynamicModalFormComponent} from './dynamic-form/dynamic-modal-form.component';
 import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
-import {Const} from './const';
-import {GridComponent} from './grid.component';
 
 export abstract class AbstractEntityComponent<Entity extends AbstractEntity> implements OnInit, OnDestroy {
-    @ViewChild(DynamicModalFormComponent)
-    @ViewChild(GridComponent)
     public dtOptions: DataTables.Settings = {};
     entities: Entity[] = [];
     dataTableResponse: DataTablesResponse<Entity> = null;
@@ -62,11 +58,6 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
     }
 
     index() {
-        this.dtOptions = {
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/' + Const.dtLangFile[this.translate.currentLang] + '.json'
-            }
-        };
         const that = this;
         if (this.paginate) {
             this.dtOptions = {
@@ -93,10 +84,6 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
         } else {
             this.service.index().subscribe((res) => {
                 this.entities = Helper.convertToEntities(res.data, this.entityType);
-                this.dtOptions = {
-                    pagingType: 'full_numbers',
-                    pageLength: Pagination.DEFAULT_PER_PAGE
-                };
             });
         }
     }
@@ -170,7 +157,7 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
                 entity[control.key] = control.value;
             });
             this.service.store(entity).subscribe((response) => {
-                    this.entities.push(entity);
+                    // this.entities.push(entity);
                     this.index();
                     Helper.showToast(me.toasterService, 'success', '', response.message);
                 },

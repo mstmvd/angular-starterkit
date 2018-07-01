@@ -3,13 +3,14 @@ import {AbstractEntity} from '../entity/abstract-entity';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {Const} from './const';
-import {lower} from 'case';
+import {Pagination} from './pagination';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-grid',
     template: `
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
-            <thead>
+            <thead *ngIf="entities?.length > 0">
             <tr>
                 <ng-container *ngFor="let key of this.entityKeys">
                     <td *ngIf="key !== 'actions'" [translate]="this.translatePrefix + key"></td>
@@ -72,18 +73,15 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
 
     entityGridOptions = {};
 
-    constructor() {
+    constructor(private translate: TranslateService) {
     }
-
-    ngOnInit(): void {
-    }
-
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['entities']) {
             if (this.entities.length > 0) {
                 const me = this;
                 this.translatePrefix = 'entity.' + this.entities[0].constructor.name + '.';
+                this.entityKeys = [];
                 Object.keys(this.entities[0]).forEach(function (value, index, array) {
                     const option = getGrid(me.entities[0], value);
                     if (option) {
@@ -92,8 +90,19 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
                     }
                 });
             }
+            this.dtRender();
         }
-        this.dtRender();
+    }
+
+    ngOnInit(): void {
+        this.dtOptions = {
+            pagingType: 'full_numbers',
+            pageLength: Pagination.DEFAULT_PER_PAGE,
+            retrieve: true,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/' + Const.dtLangFile[this.translate.currentLang] + '.json'
+            }
+        };
     }
 
     doAction(name, value) {
@@ -101,12 +110,15 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
     }
 
     dtRender(): void {
-        if (this.dtElement.dtInstance) {
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.destroy();
-                this.dtTrigger.next();
-            });
-        } else {
+        if (this.entities.length > 0) {
+            this.dtOptions = {
+                pagingType: 'full_numbers',
+                pageLength: Pagination.DEFAULT_PER_PAGE,
+                retrieve: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.16/i18n/' + Const.dtLangFile[this.translate.currentLang] + '.json'
+                }
+            };
             this.dtTrigger.next();
         }
     }

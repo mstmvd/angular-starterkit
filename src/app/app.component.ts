@@ -14,11 +14,11 @@ export class AppComponent {
     public spinkit = Spinkit;
 
     constructor(private authService: AuthService, private translate: TranslateService, layoutService: NbLayoutDirectionService) {
+        translate.setDefaultLang(Const.defaultLang);
         const locale = localStorage.getItem('locale');
         if (locale) {
             translate.use(locale);
         } else {
-            translate.setDefaultLang(Const.defaultLang);
             localStorage.setItem('locale', translate.currentLang);
         }
         translate.onLangChange.subscribe((event: LangChangeEvent) => {

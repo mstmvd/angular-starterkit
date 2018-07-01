@@ -6,7 +6,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {AbstractFormControl} from './controls/abstract-form-control';
 import {FormControlService} from './form-control.service';
 import {getDynamicFormControl} from './dynamic-form';
-import {lower} from 'case';
 
 @Component({
     providers: [FormControlService],
