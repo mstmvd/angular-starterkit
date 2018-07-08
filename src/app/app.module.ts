@@ -18,6 +18,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgHttpLoaderModule} from 'ng-http-loader';
 import {DynamicFormControlComponent} from './util/dynamic-form/dynamic-form-control.component';
 import {DynamicModalFormComponent} from './util/dynamic-form/dynamic-modal-form.component';
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -49,7 +50,8 @@ export function HttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        NgHttpLoaderModule
+        NgHttpLoaderModule,
+        DpDatePickerModule,
     ],
     providers: [
         {

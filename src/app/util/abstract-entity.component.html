@@ -1,8 +1,9 @@
 <nb-card>
     <nb-card-header [translate]="this.title"></nb-card-header>
     <nb-card-body>
-        <button type="button" class="btn btn-primary" (click)="this.store()" [translate]="'button.new'"></button>
+        <button [hidden]="this.hideButtonNew" type="button" class="btn btn-primary" (click)="this.store()"
+                [translate]="'button.new'"></button>
         <app-grid (action)="this.doAction($event)" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                  [entities]="this.entities"></app-grid>
+                  [entities]="this.entities" [entityService]="this.service"></app-grid>
     </nb-card-body>
 </nb-card>

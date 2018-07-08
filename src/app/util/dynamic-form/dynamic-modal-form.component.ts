@@ -73,6 +73,17 @@ export class DynamicModalFormComponent<Entity extends AbstractEntity> implements
                 if (control.dataService) {
                     control.fillData(me.injector.get(control.dataService.service));
                 }
+                if (control.bind) {
+                    formModel.forEach(c => {
+                        if (c.key === control.bind.field) {
+                            c.change.push(function (event, form, con) {
+                                control.dataService = control.bind.fn(con.value);
+                                control.fillData(me.injector.get(control.dataService.service));
+                            });
+                            return;
+                        }
+                    });
+                }
                 formModel.push(control);
             }
         });

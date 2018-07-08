@@ -16,7 +16,6 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
     public dtOptions: DataTables.Settings = {};
     entities: Entity[] = [];
     dataTableResponse: DataTablesResponse<Entity> = null;
-    service: AbstractEntityService<Entity>;
     http: HttpClient;
     public entityType: any;
     activeSelector: string;
@@ -26,15 +25,16 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
     dtTrigger: Subject<any> = new Subject();
     transSub: any;
     title: string;
+    indexParams: {} = {};
+    protected hideButtonNew = false;
 
     protected constructor(entityType: new () => Entity,
-                          service: AbstractEntityService<Entity>,
+                          protected service: AbstractEntityService<Entity>,
                           http: HttpClient,
                           protected modalService: NgbModal,
                           private toasterService: ToasterService,
                           private activeRoute: ActivatedRoute,
                           private translate: TranslateService) {
-        this.service = service;
         this.http = http;
         this.entityType = entityType;
         this.sub = this.activeRoute.params.subscribe(params => {
@@ -45,10 +45,10 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
 
 
     ngOnInit() {
-        this.index();
+        this.index(this.indexParams);
         const me = this;
         this.transSub = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-            me.index();
+            me.index(this.indexParams);
         });
     }
 
@@ -57,7 +57,7 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
         this.transSub.unsubscribe();
     }
 
-    index() {
+    index(params?) {
         const that = this;
         if (this.paginate) {
             this.dtOptions = {
@@ -82,7 +82,7 @@ export abstract class AbstractEntityComponent<Entity extends AbstractEntity> imp
                 }
             };
         } else {
-            this.service.index().subscribe((res) => {
+            this.service.index(params).subscribe((res) => {
                 this.entities = Helper.convertToEntities(res.data, this.entityType);
             });
         }

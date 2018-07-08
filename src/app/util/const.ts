@@ -19,7 +19,7 @@ export class Const {
         bodyOutputType: BodyOutputType.TrustedHtml
     });
 
-    static dynamicFormControlfMetadataKey = 'DynamicFormControl';
+    static dynamicFormControlMetadataKey = 'DynamicFormControl';
     static gridMetadataKey = 'Grid';
     static authMetadataKey = 'Auth';
 }

@@ -33,6 +33,14 @@ export class Helper {
         return entities;
     }
 
+    static convertToEntity(data, entityType) {
+        const jsonConvert: JsonConvert = new JsonConvert();
+        jsonConvert.valueCheckingMode = ValueCheckingMode.ALLOW_NULL;
+        const entity = jsonConvert.deserialize(data, entityType);
+        entity.init();
+        return entity;
+    }
+
     static equals(a, b) {
         if (a && b) {
             if (typeof a === typeof b && typeof a === 'object') {

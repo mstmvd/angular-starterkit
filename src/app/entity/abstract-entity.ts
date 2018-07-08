@@ -13,7 +13,7 @@ export abstract class AbstractEntity {
             {type: 'destroy'}
         ]
     })
-    actions: null = undefined;
+    actions = true;
 
     abstract init();
 

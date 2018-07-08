@@ -20,6 +20,7 @@ export interface AbstractFormControlOptions<T> {
     dataService?: DynamicFormControlDataService;
     hide?: DynamicFormControlHidden | Boolean;
     validators?: ValidatorFn[];
+    bind?: { field: string; fn: Function };
 }
 
 export class AbstractFormControl<T> {
@@ -30,10 +31,11 @@ export class AbstractFormControl<T> {
     order: number;
     controlType: string;
     placeholder: string;
-    change: Function;
+    change: Function[];
     dataService: DynamicFormControlDataService = undefined;
     hide: DynamicFormControlHidden | Boolean = undefined;
     validators: ValidatorFn[] = [];
+    bind: { field: string; fn: Function } = undefined;
 
     constructor(options: AbstractFormControlOptions<T> = {}) {
         const me = this;
@@ -43,12 +45,13 @@ export class AbstractFormControl<T> {
         this.required = !!options.required;
         this.order = options.order === undefined ? 1 : options.order;
         this.placeholder = options.placeholder || '';
-        this.change = options.change || function (event, form: FormGroup) {
+        this.change = options.change ? [options.change] : [function (event, form: FormGroup) {
             me.value = form.value[me.key];
-        };
+        }];
         this.dataService = options.dataService || undefined;
         this.hide = options.hide || undefined;
         this.validators = options.validators || [];
+        this.bind = options.bind || undefined;
     }
 
     fillData(service) {

@@ -12,12 +12,12 @@ import {Helper} from '../helper';
             <label [attr.for]="control.key" class="col-sm-3 form-control-label">{{control.label}}</label>
             <div [ngSwitch]="control.controlType" class="col-sm-9">
                 <input *ngSwitchCase="'textbox'" [formControlName]="control.key" [id]="control.key" [type]="control.type"
-                       class="form-control" [placeholder]="control.placeholder" (change)="control.change($event, form)"
+                       class="form-control" [placeholder]="control.placeholder" (change)="doChange($event, form, control)"
                        [checked]="control.value">
                 <textarea *ngSwitchCase="'textarea'" [formControlName]="control.key" [id]="control.key" [rows]="control.rows"
-                          class="form-control" [placeholder]="control.placeholder" (change)="control.change($event, form)"></textarea>
+                          class="form-control" [placeholder]="control.placeholder" (change)="doChange($event, form, control)"></textarea>
                 <select [id]="control.key" *ngSwitchCase="'select'" [formControlName]="control.key" [compareWith]="helper.equals"
-                        class="form-control" (change)="control.change($event, form)">
+                        class="form-control" (change)="doChange($event, form, control)">
                     <option *ngFor="let opt of control.options" [ngValue]="opt.value">{{opt.label}}</option>
                 </select>
             </div>
@@ -47,5 +47,9 @@ export class DynamicFormControlComponent implements OnInit {
             }
         }
         return false;
+    }
+
+    doChange(event, form, control) {
+        control.change.forEach(fn => fn(event, form, control));
     }
 }

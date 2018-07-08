@@ -5,6 +5,8 @@ import {DataTableDirective} from 'angular-datatables';
 import {Const} from './const';
 import {Pagination} from './pagination';
 import {TranslateService} from '@ngx-translate/core';
+import {AbstractEntityService} from './abstract-entity.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
     selector: 'app-grid',
@@ -15,7 +17,7 @@ import {TranslateService} from '@ngx-translate/core';
                 <ng-container *ngFor="let key of this.entityKeys">
                     <td *ngIf="key !== 'actions'" [translate]="this.translatePrefix + key"></td>
                 </ng-container>
-                <td *ngIf="this.entityGridOptions['actions']" [translate]="'grid.actions'"></td>
+                <td *ngIf="this.entityGridOptions['actions'] && entities[0].actions" [translate]="'grid.actions'"></td>
             </tr>
             </thead>
             <tbody>
@@ -23,7 +25,7 @@ import {TranslateService} from '@ngx-translate/core';
                 <ng-container *ngFor="let key of this.entityKeys">
                     <td *ngIf="key !== 'actions'" [innerHtml]="render(entity, key)"></td>
                 </ng-container>
-                <td *ngIf="this.entityGridOptions['actions']">
+                <td *ngIf="this.entityGridOptions['actions'] && entity.actions">
                     <ng-container *ngFor="let action of this.entityGridOptions['actions']['actions']">
                         <ng-container *ngIf="action.type; then defaultActions else customActions"></ng-container>
                         <ng-template #defaultActions>
@@ -39,9 +41,12 @@ import {TranslateService} from '@ngx-translate/core';
                             </span>
                         </ng-template>
                         <ng-template #customActions>
-                            <i [routerLink]="action.routerLink ? action.routerLink(entity) : null" style="cursor: pointer"
+                            <i style="cursor: pointer"
                                [class]="'grid-btn fa fa-2x ' + action.class"
-                               (click)="action.click ? action.click() : null" [title]="action.title | translate"></i>
+                               (click)="action.routerLink ? routerFunc(entity, action.routerLink(entity))
+                               : (action.click ? action.click(entity)
+                               : (action.doAction ? doAction(action.doAction, entity) : null))"
+                               [title]="action.title | translate"></i>
                         </ng-template>
                     </ng-container>
                 </td>
@@ -63,6 +68,8 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
     dtOptions: DataTables.Settings = {};
     @Input()
     dtTrigger: Subject<any> = new Subject();
+    @Input()
+    entityService: AbstractEntityService<Entity>;
 
     @Output()
     action: EventEmitter<any> = new EventEmitter<any>();
@@ -73,7 +80,7 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
 
     entityGridOptions = {};
 
-    constructor(private translate: TranslateService) {
+    constructor(private translate: TranslateService, private router: Router, private route: ActivatedRoute) {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -105,8 +112,9 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
         };
     }
 
-    doAction(name, value) {
-        this.action.emit({name: name, value: value});
+    doAction(name, entity) {
+        this.entityService.entity = entity;
+        this.action.emit({name: name, value: entity});
     }
 
     dtRender(): void {
@@ -124,21 +132,27 @@ export class GridComponent<Entity extends AbstractEntity> implements OnInit, OnC
     }
 
     render(entity, key) {
-        if (this.entityGridOptions[key] && this.entityGridOptions[key].render) {
-            return this.entityGridOptions[key].render(entity[key]);
+        if (this.entityGridOptions[key] && this.entityGridOptions[key].render && entity[key]) {
+            return this.entityGridOptions[key].render(entity[key], entity);
         } else {
             return entity[key];
         }
+    }
+
+    routerFunc(entity, route) {
+        this.entityService.entity = entity;
+        this.router.navigate(route.split('/'), {relativeTo: this.route});
     }
 }
 
 export interface GridOption {
     render?: Function;
     actions?: ({
+        title?: string; // will be translated
         class?: string; // fontAwesome class name
         routerLink?: Function;
-        title?: string; // will be translated
         click?: Function;
+        doAction?: string;
     } | {
         type: 'update' | 'destroy';
     })[];

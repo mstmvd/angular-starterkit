@@ -7,6 +7,7 @@ export abstract class AbstractEntityService<Entity extends AbstractEntity> {
     route: string;
     routeParams = {};
     paginate = false;
+    entity: Entity;
 
     protected constructor(protected http: HttpClient) {
     }
@@ -71,7 +72,7 @@ export abstract class AbstractEntityService<Entity extends AbstractEntity> {
         return this.http.post<ServerResponse>(this.getRoute() + '/' + entity.id, formData);
     }
 
-    private append(entity: Entity, value, formData: FormData) {
+    protected append(entity: Entity, value, formData: FormData) {
         if (entity[value] instanceof File || typeof entity[value] !== 'object') {
             formData.append(value, entity[value]);
         } else {
