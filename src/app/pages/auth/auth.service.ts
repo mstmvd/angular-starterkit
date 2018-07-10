@@ -18,6 +18,9 @@ export class AuthService {
     constructor(private http: HttpClient, private userService: UserService) {
         if (this.isLoggedIn()) {
             const data = Helper.parse_jwt(localStorage.getItem('token'));
+            this.userService.user = new User();
+            this.userService.user.id = data.sub;
+            this.userService.user.activeRole = localStorage.getItem('active_role');
             this.setUser(data.sub);
         }
     }
